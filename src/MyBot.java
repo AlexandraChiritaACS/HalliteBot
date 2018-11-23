@@ -67,7 +67,7 @@ class Slave{
         this.s = s;
     }
     public void runAI(LinkedList<Command> Commandq){
-
+            
     }
     
     
