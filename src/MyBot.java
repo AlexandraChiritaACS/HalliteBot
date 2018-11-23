@@ -41,7 +41,7 @@ class Master{
             }
         }
 
-        int ships;
+        int ships = 0;
         for (final Ship ship : game.me.ships.values()) {
             if(slaves.get(ship) == null){
                 slaves.put(ship, new Slave(ship));
@@ -51,26 +51,19 @@ class Master{
             ships++;
         }
         if(ships == 0){
-            game.me.spawn();
+            
         }
-
-        
-        
         return commands;
-
-    }
+    }\
 }
-
 class Slave{
     Ship s;
     public Slave(Ship s){
         this.s = s;
     }
-    public void runAI(LinkedList<Command> Commandq){
-            
+    public void runAI(LinkedList<Command> cq){
+        moveN(cq);
     }
-    
-    
     public void moveN(LinkedList<Command> cq){
         cq.push(s.move(Direction.NORTH)); 
     }
