@@ -19,17 +19,16 @@ public class MyBot {
     }
 }
 
-//manages ships and large scale operations
 class Master{
     private int[][]ph;
-    
-    //maps ships to slaves
+    private Game game;
     private Map<Ship, Slave> slaves;
     public Master(Game g){
         int mw = g.gameMap.width;
         int mh = g.gameMap.height;
-
-        ph = new int[mw][mh];
+        this.game = g;
+        this.ph = new int[mw][mh];
+        slaves = new Hashtable();
     }
 
     public LinkedList<Command> update(Game game) {
@@ -42,14 +41,19 @@ class Master{
             }
         }
 
-
+        int ships;
         for (final Ship ship : game.me.ships.values()) {
             if(slaves.get(ship) == null){
                 slaves.put(ship, new Slave(ship));
             }
             Slave s = slaves.get(ship);
-            s.update();
+            s.runAI(commands);
+            ships++;
         }
+        if(ships == 0){
+            game.me.spawn();
+        }
+
         
         
         return commands;
@@ -57,25 +61,40 @@ class Master{
     }
 }
 
-//wrapper for ship stores a directive location and an ai
 class Slave{
     Ship s;
-    
     public Slave(Ship s){
         this.s = s;
     }
+    public void runAI(LinkedList<Command> Commandq){
+
+    }
     
-
-}
-
-//regular pair class like really whytf would i not be able to get this
-
-class Pair{
-    private int a,b;
-    public Pair(int a, int b){
-        this.a = a;
-        this.b = b;
+    
+    public void moveN(LinkedList<Command> cq){
+        cq.push(s.move(Direction.NORTH)); 
+    }
+    public void moveS(LinkedList<Command> cq){
+        cq.push(s.move(Direction.SOUTH));
+    }
+    public void moveE(LinkedList<Command> cq){
+        cq.push(s.move(Direction.EAST));
+    }
+    public void moveW(LinkedList<Command> cq){
+        cq.push(s.move(Direction.WEST));
     }
 
 
+
+
 }
+
+class Pair{
+    int a,b;
+    public Pair(int a, int b){
+        this.a = a;
+        this.b = b; 
+    }
+}
+
+
