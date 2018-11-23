@@ -21,18 +21,19 @@ public class MyBot {
 
 class Master{
     private int[][]ph;
+    int mw,mh;
     private Game game;
     private Map<Ship, Slave> slaves;
     public Master(Game g){
-        int mw = g.gameMap.width;
-        int mh = g.gameMap.height;
+        this.mw = g.gameMap.width;
+        this.mh = g.gameMap.height;
         this.game = g;
         this.ph = new int[mw][mh];
-        slaves = new Hashtable();
+        this.slaves = new Hashtable();
     }
 
     public LinkedList<Command> update(Game game) {
-        LinkedList<Command> commands = new LinkedList<>();
+        LinkedList<Command> cq = new LinkedList<>();
         for (int i = 0; i < ph.length; i++) {
             for (int j = 0; j < ph[0].length; j++) {
                 if (ph[i][j] > 0) {
@@ -47,14 +48,17 @@ class Master{
                 slaves.put(ship, new Slave(ship));
             }
             Slave s = slaves.get(ship);
-            s.runAI(commands);
+            s.runAI(cq);
             ships++;
         }
         if(ships == 0){
-            
+            spawn(cq);
         }
-        return commands;
-    }\
+        return cq;
+    }
+    public void spawn(Collection<Command>cq){
+        cq.add(game.me.shipyard.spawn());   
+    }
 }
 class Slave{
     Ship s;
@@ -76,10 +80,6 @@ class Slave{
     public void moveW(LinkedList<Command> cq){
         cq.push(s.move(Direction.WEST));
     }
-
-
-
-
 }
 
 class Pair{
